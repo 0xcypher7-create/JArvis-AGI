@@ -1,0 +1,38 @@
+{
+  "name": "jarvis-background-service",
+  "version": "1.0.0",
+  "description": "JARVIS AI Assistant Background Service",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "install-service": "node scripts/install-service.js",
+    "uninstall-service": "node scripts/uninstall-service.js",
+    "status": "node scripts/status.js"
+  },
+  "keywords": ["jarvis", "ai", "assistant", "background", "service"],
+  "author": "JARVIS Team",
+  "license": "MIT",
+  "dependencies": {
+    "node-audiorecorder": "^2.3.0",
+    "node-record-lpcm16": "^1.0.1",
+    "speaker": "^0.5.4",
+    "node-windows": "^1.0.0-beta.8",
+    "node-linux": "^0.1.14",
+    "pm2": "^5.4.2",
+    "chalk": "^4.1.2",
+    "dotenv": "^16.3.1",
+    "winston": "^3.13.0",
+    "z-ai-web-dev-sdk": "^0.0.10",
+    "@prisma/client": "^6.11.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "^5",
+    "ts-node": "^10.9.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

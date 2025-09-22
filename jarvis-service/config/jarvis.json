@@ -1,0 +1,57 @@
+{
+  "jarvis": {
+    "name": "JARVIS",
+    "wakeWord": "jarvis",
+    "wakeWordSensitivity": 0.5,
+    "listeningTimeout": 10000,
+    "responseTimeout": 30000,
+    "maxResponseLength": 2000,
+    "language": "en-US"
+  },
+  "audio": {
+    "sampleRate": 16000,
+    "channels": 1,
+    "bitDepth": 16,
+    "encoding": "linear16",
+    "silenceThreshold": 0.01,
+    "silenceDuration": 1000
+  },
+  "system": {
+    "logLevel": "info",
+    "enableSystemAccess": true,
+    "allowedCommands": [
+      "system.info",
+      "system.shutdown",
+      "system.restart",
+      "system.volume",
+      "system.brightness",
+      "system.network",
+      "system.processes",
+      "file.read",
+      "file.write",
+      "file.list",
+      "file.delete",
+      "app.launch",
+      "app.close",
+      "web.search",
+      "web.browse"
+    ],
+    "maxCommandLength": 500
+  },
+  "ai": {
+    "model": "gpt-4",
+    "temperature": 0.7,
+    "maxTokens": 1000,
+    "systemPrompt": "You are JARVIS, an advanced AI assistant. You are helpful, intelligent, and can perform various system tasks. Always respond in a clear, concise manner and focus on being helpful.",
+    "enableMemory": true,
+    "memoryRetention": 1000
+  },
+  "logging": {
+    "level": "info",
+    "maxFiles": 10,
+    "maxSize": "10m",
+    "logToFile": true,
+    "logToConsole": true,
+    "logDir": "./logs"
+  }
+}

@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // JARVIS specific relations
+  conversations Conversation[]
+  preferences   UserPreference?
+  memories      Memory[]
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// JARVIS Conversation Model
+model Conversation {
+  id           String   @id @default(cuid())
+  userId       String
+  sessionId    String   // For grouping conversations into sessions
+  role         String   // 'user' or 'assistant'
+  content      String
+  module       String?  // 'text', 'vision', 'speech', 'code', 'system', 'error'
+  metadata     String?  // JSON string for additional data
+  createdAt    DateTime @default(now())
+  
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId, sessionId])
+  @@index([createdAt])
+}
+
+// JARVIS User Preferences Model
+model UserPreference {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  personality      String?  // 'professional', 'conversational', 'technical'
+  responseStyle    String?  // 'detailed', 'concise', 'balanced'
+  language         String?  // 'en'
+  theme            String?  // 'dark'
+  voiceEnabled     Boolean  @default(false)
+  autoSaveHistory  Boolean  @default(true)
+  maxHistoryLength Int      @default(100)
+  
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+}
+
+// JARVIS Memory Model for long-term memory
+model Memory {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String   // 'preference', 'fact', 'context', 'skill', 'relationship'
+  category    String?  // For organizing memories
+  title       String
+  content     String
+  importance  Int      @default(1) // 1-10 scale
+  strength    Int      @default(1) // Memory strength for forgetting mechanism
+  lastAccessed DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId, type])
+  @@index([userId, category])
+  @@index([importance])
+}
+
+// JARVIS Task Automation Model
+model TaskAutomation {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  trigger     String   // What triggers this task
+  steps       String   // JSON string of steps to execute
+  isActive    Boolean  @default(true)
+  lastRun     DateTime?
+  runCount    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([userId, isActive])
+  @@index([createdAt])
+}
+
+// JARVIS System Log Model
+model SystemLog {
+  id        String   @id @default(cuid())
+  level     String   // 'info', 'warning', 'error', 'debug'
+  module    String   // Which system module
+  message   String
+  metadata  String?  // JSON string for additional context
+  createdAt DateTime @default(now())
+  
+  @@index([level])
+  @@index([module])
+  @@index([createdAt])
+}
